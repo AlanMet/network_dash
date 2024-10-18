@@ -7,11 +7,40 @@ class MainMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        'Selected Menu Index: $selectedIndex',
-        style: TextStyle(fontSize: 24, color: Colors.white),
-      ),
+    return getMenu(selectedIndex);
+  }
+}
+
+Widget getMenu(int index){
+  switch (index){
+    case (0):
+      return ConfigMenu();
+    case(1):
+      return Container();
+    case(2):
+      return Container();
+    case(3):
+      return Container();
+    case(4):
+      return Container();
+    default:
+      return Container();
+  }
+
+}
+
+class ConfigMenu extends StatefulWidget {
+  const ConfigMenu({super.key});
+
+  @override
+  State<ConfigMenu> createState() => _ConfigMenuState();
+}
+
+class _ConfigMenuState extends State<ConfigMenu> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+
     );
   }
 }
