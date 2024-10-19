@@ -1,7 +1,7 @@
 
-class LayerData{
+class LayerModel{
   late int size;
   late String activation;
 
-  LayerData(this.size, this.activation);
+  LayerModel(this.size, this.activation);
 }

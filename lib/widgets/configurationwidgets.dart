@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dropzone/flutter_dropzone.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:network_dash/helper/layer_data.dart';
 
-import '../helper/droppedfiles.dart';
+import '../helper/dropped_files.dart';
 import '../helper/fields.dart';
 
 class ConfigMenu extends StatefulWidget {
@@ -314,13 +315,6 @@ class _SettingSectionState extends State<SettingSection> {
   }
 }
 
-class LayerData {
-  int size;
-  String activation;
-
-  LayerData({required this.size, required this.activation});
-}
-
 class LayerSelection extends StatefulWidget {
   const LayerSelection({super.key});
 
@@ -329,136 +323,89 @@ class LayerSelection extends StatefulWidget {
 }
 
 class _LayerSelectionState extends State<LayerSelection> {
-  List<LayerData> layers = [
-    LayerData(size: 100, activation: 'relu'),
-    LayerData(size: 32, activation: 'relu'),
-    LayerData(size: 20, activation: 'relu')
-  ];
-
-  void addLayer() {
-    setState(() {
-      layers.add(LayerData(size: 10, activation: 'relu'));
-    });
-  }
-
-  void removeLayer(int index) {
-    setState(() {
-      layers.removeAt(index);
-    });
-  }
+  final data = LayerData();
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8),
-      child: Flexible(
-        fit: FlexFit.loose,
-        child: Container(
-          decoration: BoxDecoration(
-            color: const Color(0x991e201e),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          height: 400,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 10, 0, 40),
-                child: Center(
-                  child: const Text(
-                    "Tuning",
-                    style: TextStyle(
-                      color: Color(0xffECDFCC),
-                      fontSize: 32,
-                    ),
-                  ),
-                ),
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        decoration: BoxDecoration(
+          color: const Color(0x991e201e),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        height: 400,  // Set a fixed height for the container
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,  // Center the title horizontally
+          children: [
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                "Layer Configuration",
+                style: TextStyle(color: Colors.white, fontSize: 18),
+                textAlign: TextAlign.center,
               ),
-              Expanded(
+            ),
+            Expanded(
+              child: Center(
                 child: ListView.builder(
-                  itemCount: layers.length,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: data.layers.length,
                   itemBuilder: (context, index) {
-                    String layerLabel;
-
-                    if (index == 0) {
-                      layerLabel = 'Input';
-                    } else if (index == layers.length - 1) {
-                      layerLabel = 'Output';
-                    } else {
-                      layerLabel = 'Layer ${index}';
-                    }
-
-                    return Row(
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextField(
-                              keyboardType: TextInputType.number,
-                              onChanged: (value) {
-                                setState(() {
-                                  layers[index].size =
-                                      int.tryParse(value) ?? 10;
-                                });
-                              },
-                              decoration: InputDecoration(
-                                hintText: layerLabel == 'Output'
-                                    ? 'Output size'
-                                    : 'Layer size',
-                                labelText: layerLabel,
-                                filled: true,
-                                fillColor: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ),
-                        if (layerLabel != 'Input')
-                          DropdownButton<String>(
-                            value: layers[index].activation,
-                            items:
-                                ['relu', 'sigmoid', 'tanh'].map((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                            onChanged: (String? newValue) {
-                              setState(() {
-                                layers[index].activation = newValue ?? 'relu';
-                              });
-                            },
-                          ),
-                        if (layerLabel != 'Input')
-                          IconButton(
-                            icon: Icon(Icons.remove),
-                            onPressed: () => removeLayer(index),
-                          ),
-                      ],
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: buildMenuEntry(data, index),
                     );
                   },
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ElevatedButton(
-                  onPressed: addLayer,
-                  child: Text('+ Add Layer'),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Code to start training
-                    print("Training started with layers: $layers");
-                  },
-                  child: Text('Train'),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
+}
+
+Widget buildMenuEntry(LayerData data, int index) {
+  bool isFirst = index == 0;
+  bool isLast = index == data.layers.length - 1;
+  String label = 'Layer $index';
+
+  if (isFirst) {
+    label = 'Input Layer';
+  } else if (isLast) {
+    label = 'Output Layer';
+  }
+
+  List<String> options = ['relu', 'leakyRelu', 'sigmoid', 'softmax'];
+
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.center,  // Center the elements horizontally
+    children: [
+      SizedBox(
+      height: 50,
+      ),
+      // Add a SizedBox to control width for the TextField
+      SizedBox(
+        width: 150,  // Adjust width as per your requirement
+        child: CustomTextField(
+          labelText: label,
+          onChanged: (event) {
+            // Handle text field change
+          },
+        ),
+      ),
+      const SizedBox(height: 8),  // Add some spacing between the widgets
+      SizedBox(
+        width: 150,  // Ensure Dropdown gets enough width
+        child: CustomDropdown(
+          options: options,
+          onChanged: (event) {
+            // Handle dropdown change
+          },
+        ),
+      ),
+    ],
+  );
 }
