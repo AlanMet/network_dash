@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:network_dash/widgets/mainmenus.dart';
 import 'package:network_dash/widgets/sideMenu.dart';
 
-class ConfigurationScreen extends StatefulWidget {
-  const ConfigurationScreen({super.key});
+class MainScreen extends StatefulWidget {
+  const MainScreen({super.key});
 
   @override
-  _ConfigurationScreenState createState() => _ConfigurationScreenState();
+  _MainScreenState createState() => _MainScreenState();
 }
 
-class _ConfigurationScreenState extends State<ConfigurationScreen> {
+class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;  // Track selected index
 
   // Update selected index based on side menu selection

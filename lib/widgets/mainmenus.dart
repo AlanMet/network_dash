@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'configurationwidgets.dart';
+
 class MainMenu extends StatelessWidget {
-  final int selectedIndex;  // Accept the selected index
+  final int selectedIndex; // Accept the selected index
 
   const MainMenu({super.key, required this.selectedIndex});
 
@@ -11,36 +13,24 @@ class MainMenu extends StatelessWidget {
   }
 }
 
-Widget getMenu(int index){
-  switch (index){
+Widget getMenu(int index) {
+  switch (index) {
     case (0):
-      return ConfigMenu();
-    case(1):
+      // config
+      return const ConfigMenu();
+    case (1):
+      //training
       return Container();
-    case(2):
+    case (2):
+      //stats
       return Container();
-    case(3):
+    case (3):
+      //models
       return Container();
-    case(4):
+    case (4):
+      //logout
       return Container();
     default:
       return Container();
-  }
-
-}
-
-class ConfigMenu extends StatefulWidget {
-  const ConfigMenu({super.key});
-
-  @override
-  State<ConfigMenu> createState() => _ConfigMenuState();
-}
-
-class _ConfigMenuState extends State<ConfigMenu> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-
-    );
   }
 }

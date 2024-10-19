@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:network_dash/helper/side_menu_data.dart';
 
 class SideMenuWidget extends StatefulWidget {
-  final Function(int) onMenuSelected;  // Accept a callback to notify parent widget
+  final Function(int)
+      onMenuSelected; // Accept a callback to notify parent widget
 
   const SideMenuWidget({super.key, required this.onMenuSelected});
 
@@ -20,16 +21,17 @@ class _SideMenuWidgetState extends State<SideMenuWidget> {
       color: const Color(0xFF1e201e),
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
+          const Padding(
+            padding: EdgeInsets.all(8.0),
             child: ClipOval(
-              child: const Image(
+              child: Image(
                 image: AssetImage("assets/images/logo green.png"),
                 height: 150,
                 width: 150,
               ),
             ),
           ),
+          const SizedBox(height: 50),
           Expanded(
             child: ListView.builder(
               itemCount: data.menu.length,
@@ -38,8 +40,11 @@ class _SideMenuWidgetState extends State<SideMenuWidget> {
                 if (index == data.menu.length - 2) {
                   return Column(
                     children: [
-                      buildMenuEntry(data, index), // Regular second-to-last item
-                      const SizedBox(height: 50),  // Add large gap before the last item (Log Out)
+                      buildMenuEntry(
+                          data, index), // Regular second-to-last item
+                      const SizedBox(
+                          height:
+                              300), // Add large gap before the last item (Log Out)
                     ],
                   );
                 } else {
@@ -57,7 +62,7 @@ class _SideMenuWidgetState extends State<SideMenuWidget> {
   Widget buildMenuEntry(SideMenuData data, int index) {
     final isSelected = index == selectedIndex;
 
-    return InkWell(
+    return GestureDetector(
       onTap: () {
         setState(() {
           selectedIndex = index;
@@ -66,8 +71,7 @@ class _SideMenuWidgetState extends State<SideMenuWidget> {
         widget.onMenuSelected(index);
       },
       child: Container(
-        margin: const EdgeInsets.symmetric(
-            vertical: 10.0, horizontal: 8.0),
+        margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 8.0),
         decoration: BoxDecoration(
           color: isSelected ? const Color(0xFF697565) : const Color(0xFF697565),
           borderRadius: BorderRadius.circular(12),
